@@ -51,3 +51,22 @@ pub trait AddressBus {
     fn write_long(&mut self, address_space: AddressSpace, address: u32, value: u32);
 }
 
+#[cfg(test)]
+mod tests {
+    use super::{
+        PagedMem,
+        AddressBus
+    };
+
+    #[test]
+    fn address_bus_as_trait_object() {
+        // This test will not actually test anything in runtime, but will fail
+        // if the AddressBus can't be used as a trait object.
+        //
+        // Internally in r68k, the AddressBus is not referred to as a trait object,
+        // but since AddressBus is an external API, and other projects should be
+        // able to use it as such
+        let mem = PagedMem::new(0xffffffff);
+        let _ : Box<dyn AddressBus> = Box::from(mem);
+    }
+}

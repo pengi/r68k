@@ -42,7 +42,6 @@ pub const USER_PROGRAM: AddressSpace = AddressSpace(Mode::User, Segment::Program
 pub const USER_DATA: AddressSpace = AddressSpace(Mode::User, Segment::Data);
 
 pub trait AddressBus {
-    fn copy_from(&mut self, other: &Self);
     fn read_byte(&self, address_space: AddressSpace, address: u32) -> u32;
     fn read_word(&self, address_space: AddressSpace, address: u32) -> u32;
     fn read_long(&self, address_space: AddressSpace, address: u32) -> u32;

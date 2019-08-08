@@ -78,15 +78,15 @@ impl<T: OpsLogging> LoggingMem<T> {
     pub fn diffs(&self) -> DiffIter {
         self.mem.diffs()
     }
-}
 
-impl<T: OpsLogging> AddressBus for LoggingMem<T> {
-    fn copy_from(&mut self, other: &Self) {
+    pub fn copy_from(&mut self, other: &Self) {
         for (addr, byte) in other.diffs() {
             self.write_u8(addr, u32::from(byte));
         }
     }
+}
 
+impl<T: OpsLogging> AddressBus for LoggingMem<T> {
     fn read_byte(&self, address_space: AddressSpace, address: u32) -> u32 {
         let value = self.read_u8(address);
         self.logger.log(Operation::ReadByte(address_space, address & ADDRBUS_MASK, value as u8));

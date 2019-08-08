@@ -77,6 +77,12 @@ impl PagedMem {
     pub fn new(initializer: u32) -> PagedMem {
         PagedMem { pages: HashMap::new(), initializer }
     }
+
+    pub fn copy_from(&mut self, other: &Self) {
+        for (addr, byte) in other.diffs() {
+            self.write_u8(addr, byte as u32);
+        }
+    }
 }
 
 pub struct DiffIter<'a> {
@@ -100,12 +106,6 @@ impl<'a> Iterator for DiffIter<'a> {
 }
 
 impl AddressBus for PagedMem {
-    fn copy_from(&mut self, other: &Self) {
-        for (addr, byte) in other.diffs() {
-            self.write_u8(addr, u32::from(byte));
-        }
-    }
-
     fn read_byte(&self, _address_space: AddressSpace, address: u32) -> u32 {
         self.read_u8(address)
     }

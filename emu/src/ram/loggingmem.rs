@@ -87,20 +87,20 @@ impl<T: OpsLogging> LoggingMem<T> {
 }
 
 impl<T: OpsLogging> AddressBus for LoggingMem<T> {
-    fn read_byte(&self, address_space: AddressSpace, address: u32) -> u32 {
+    fn read_byte(&mut self, address_space: AddressSpace, address: u32) -> u32 {
         let value = self.read_u8(address);
         self.logger.log(Operation::ReadByte(address_space, address & ADDRBUS_MASK, value as u8));
         value
     }
 
-    fn read_word(&self, address_space: AddressSpace, address: u32) -> u32 {
+    fn read_word(&mut self, address_space: AddressSpace, address: u32) -> u32 {
         let value = (self.read_u8(address) << 8
                     |self.read_u8(address.wrapping_add(1))) as u32;
         self.logger.log(Operation::ReadWord(address_space, address & ADDRBUS_MASK, value as u16));
         value
     }
 
-    fn read_long(&self, address_space: AddressSpace, address: u32) -> u32 {
+    fn read_long(&mut self, address_space: AddressSpace, address: u32) -> u32 {
         let value = (self.read_u8(address) << 24
                     |self.read_u8(address.wrapping_add(1)) << 16
                     |self.read_u8(address.wrapping_add(2)) <<  8

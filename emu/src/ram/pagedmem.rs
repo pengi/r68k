@@ -106,16 +106,16 @@ impl<'a> Iterator for DiffIter<'a> {
 }
 
 impl AddressBus for PagedMem {
-    fn read_byte(&self, _address_space: AddressSpace, address: u32) -> u32 {
+    fn read_byte(&mut self, _address_space: AddressSpace, address: u32) -> u32 {
         self.read_u8(address)
     }
 
-    fn read_word(&self, _address_space: AddressSpace, address: u32) -> u32 {
+    fn read_word(&mut self, _address_space: AddressSpace, address: u32) -> u32 {
         (self.read_u8(address) << 8
         |self.read_u8(address.wrapping_add(1))) as u32
     }
 
-    fn read_long(&self, _address_space: AddressSpace, address: u32) -> u32 {
+    fn read_long(&mut self, _address_space: AddressSpace, address: u32) -> u32 {
         (self.read_u8(address) << 24
         |self.read_u8(address.wrapping_add(1)) << 16
         |self.read_u8(address.wrapping_add(2)) <<  8
